@@ -17,8 +17,7 @@
 #include "Stiostream.h"
 #include "TEfficiency.h"
 #include "TFile.h"
-#include "TH1D.h"
-#include "TH2D.h"
+#include "TH3F.h"
 #include "TProfile.h"
 #include "TRandom.h"
 #include "TTree.h"
@@ -254,7 +253,6 @@ Int_t StPidHistMaker::Make() {
 		Int_t tofIdx = picoTrack->bTofPidTraitsIndex();
 		int bTofMatchFlag = 0;
 		bool hasTof = false;
-		bool isGoodTof = false;
 		if (tofIdx >= 0) {
 			StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(tofIdx);
 			bTofMatchFlag = tofPid->btofMatchFlag();
@@ -266,7 +264,7 @@ Int_t StPidHistMaker::Make() {
 		}
 		if (
 			(hasTof && m2 > 0.6 && m2 < 1.2) ||
-			!hadTof
+			!hasTof
 		) {
 			if (charge > 0) { hPro->Fill(YP, pt, nSigProton); }
 			else { hPbar->Fill(YP, pt, nSigProton); }
