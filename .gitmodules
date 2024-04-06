@@ -1,0 +1,15 @@
+[submodule "StRoot/CentCorrTool"]
+	path = StRoot/CentCorrTool
+	url = https://github.com/Yme-s-STAR-analysis/CentCorrTool
+[submodule "StRoot/MeanDcaTool"]
+	path = StRoot/MeanDcaTool
+	url = https://github.com/Yme-s-STAR-analysis/MeanDcaTool
+[submodule "StRoot/TriggerTool"]
+	path = StRoot/TriggerTool
+	url = https://github.com/Yme-s-STAR-analysis/TriggerTool
+[submodule "StRoot/StCFMult"]
+	path = StRoot/StCFMult
+	url = https://github.com/Yme-s-STAR-analysis/StCFMult
+[submodule "StRoot/TpcShiftTool"]
+	path = StRoot/TpcShiftTool
+	url = https://github.com/Yme-s-STAR-analysis/TpcShiftTool
