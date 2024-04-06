@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job maxFilesPerProcess="60" simulateSubmission="false">
+
+  <SandBox installer="ZIP">
+    <Package name="libZip">
+      <File>file:./readPicoDst.C</File>
+      <File>file:./StRoot</File>
+      <File>file:./.sl73_gcc485</File>
+    </Package>
+  </SandBox>
+
+  <command>
+    starver pro
+    root4star -l -q -b readPicoDst.C\(\"$FILELIST\",\"$JOBID\"\)
+  </command>
+
+  <stdout URL="file:TARGET/log/$JOBID.log" />
+  <stderr URL="file:TARGET/err/$JOBID.err" />
+
+  <Generator>
+    <Location>TARGET/report/</Location>
+    <ScriptLocation>TARGET/csh/</ScriptLocation>
+    <ListLocation>TARGET/list/</ListLocation>
+  </Generator>
+
+  <input URL="filelist:/star/u/yghuang/Work/DataAnalysis/BES2/OverAll/4EmbedList/3tofList/19.10k.list"/>
+  <output fromScratch="*.root" toURL="file:TARGET/out/" />
+  <output fromScratch="*.log" toURL="file:TARGET/log/" />
+
+
+
+</job>
