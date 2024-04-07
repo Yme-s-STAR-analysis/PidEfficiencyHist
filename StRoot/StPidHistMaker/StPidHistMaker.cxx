@@ -264,7 +264,7 @@ Int_t StPidHistMaker::Make() {
 		}
 		if (
 			(hasTof && m2 > 0.6 && m2 < 1.2) ||
-			!hasTof
+			(!hasTof && pt <= 0.4) // only skip TOF quality condition in very low pt
 		) {
 			if (charge > 0) { hPro->Fill(YP, pt, nSigProton); }
 			else { hPbar->Fill(YP, pt, nSigProton); }
