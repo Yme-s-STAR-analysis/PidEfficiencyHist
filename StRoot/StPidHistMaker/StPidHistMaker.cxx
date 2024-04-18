@@ -13,6 +13,7 @@
 #include "StPicoEvent/StPicoEpdHit.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
+#include "StPicoEvent/StPicoPhysicalHelix.h"
 #include "StThreeVectorF.hh"
 #include "Stiostream.h"
 #include "TEfficiency.h"
@@ -22,7 +23,6 @@
 #include "TRandom.h"
 #include "TTree.h"
 #include "phys_constants.h"
-#include "StPicoPhysicalHelix.h"
 
 #include "StRoot/CentCorrTool/CentCorrTool.h"
 #include "StRoot/MeanDcaTool/MeanDcaTool.h"
