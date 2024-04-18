@@ -213,7 +213,7 @@ Int_t StPidHistMaker::Make() {
 
 	// track loop
   	Int_t nTracks = mPicoDst->numberOfTracks();
-	const Float_t mField = picoEvent->bField();
+	const Float_t mField = event->bField();
 
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		picoTrack = (StPicoTrack*)mPicoDst->track(iTrack);
@@ -258,7 +258,7 @@ Int_t StPidHistMaker::Make() {
         Double_t btofYLocal = -999.0;
 		bool hasTof = false;
         if (tofId >= 0) {
-            StPicoBTofPidTraits* tofPid = picoDst->btofPidTraits(tofId);
+            StPicoBTofPidTraits* tofPid = mPicoDst->btofPidTraits(tofId);
             btofMatchFlag = tofPid->btofMatchFlag();
             if (tofPid) {
                 beta = tofPid->btofBeta();
@@ -273,7 +273,7 @@ Int_t StPidHistMaker::Make() {
                     const StThreeVectorF* vtxPosSt = new StThreeVectorF(
                         vx, vy, vz
                     );
-                    Double_t L = tofPathLength(vertexPosSt, btofHitsPosSt, helix.curvature());
+                    Double_t L = tofPathLength(vtxPosSt, btofHitsPosSt, helix.curvature());
                     beta = tof > 0 ? L / (tof * (C_C_LIGHT/1.e9)) : std::numeric_limits<Float_t>::quiet_NaN(); // note: quiet nan will never pass > N or < N
                 }
             }
@@ -281,7 +281,7 @@ Int_t StPidHistMaker::Make() {
         Double_t m2 = -999;
         // if (btofMatchFlag > 0 && beta > 1e-5) {
         if (btofMatchFlag > 0 && beta > 0 && fabs(btofYLocal) < 1.8) {
-            m2 = pcm * pcm * (pow(1.0 / beta, 2) - 1);
+            m2 = p * p * (pow(1.0 / beta, 2) - 1);
         }
 		if (
 			(hasTof && m2 > 0.6 && m2 < 1.2) ||
