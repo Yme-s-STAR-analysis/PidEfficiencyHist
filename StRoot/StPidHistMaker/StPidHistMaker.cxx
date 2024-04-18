@@ -22,6 +22,7 @@
 #include "TRandom.h"
 #include "TTree.h"
 #include "phys_constants.h"
+#include "StPicoPhysicalHelix.h"
 
 #include "StRoot/CentCorrTool/CentCorrTool.h"
 #include "StRoot/MeanDcaTool/MeanDcaTool.h"
@@ -212,6 +213,7 @@ Int_t StPidHistMaker::Make() {
 
 	// track loop
   	Int_t nTracks = mPicoDst->numberOfTracks();
+	const Float_t mField = picoEvent->bField();
 
 	for (Int_t iTrack = 0; iTrack < nTracks; iTrack++) {
 		picoTrack = (StPicoTrack*)mPicoDst->track(iTrack);
@@ -219,7 +221,9 @@ Int_t StPidHistMaker::Make() {
 
 		if (!picoTrack->isPrimary()) { continue; }
 
-		Float_t dca = fabs(picoTrack->gDCA(vx, vy, vz));
+		// Float_t dca = fabs(picoTrack->gDCA(vx, vy, vz));
+		StPicoPhysicalHelix helix = picoTrack->helix(mField);
+        Double_t dca = fabs(helix.geometricSignedDistance(pVtx));
 
 		TVector3 pmomentum = picoTrack->pMom();
 		Float_t p = pmomentum.Mag();
@@ -241,27 +245,44 @@ Int_t StPidHistMaker::Make() {
     	Int_t charge = (Int_t)picoTrack->charge();
 		nSigProton -= mtShift->GetShift(runId, pt, eta);
 
-		if (nHitsdEdx < 5 || nHitsFit < 20 || nHitsRatio < 0.52) {  continue; }
-		if (dca > 1.0) {  continue; }
+		if (nHitsdEdx < 5 || nHitsFit < 20 || nHitsRatio < 0.52) { continue; }
+		if (dca > 1.0) { continue; }
 
 		// Int_t vzBin = vz_split(vz);
 		// if (vzBin < 0) { continue; }
 
 		// set TOF flag
-		Float_t m2 = -999;
-		Float_t beta = 0;
-		Int_t tofIdx = picoTrack->bTofPidTraitsIndex();
-		int bTofMatchFlag = 0;
+        Int_t tofId = picoTrack->bTofPidTraitsIndex();
+        Int_t btofMatchFlag = 0;
+        Double_t beta = -1.0;
+        Double_t btofYLocal = -999.0;
 		bool hasTof = false;
-		if (tofIdx >= 0) {
-			StPicoBTofPidTraits *tofPid = mPicoDst->btofPidTraits(tofIdx);
-			bTofMatchFlag = tofPid->btofMatchFlag();
-			if (bTofMatchFlag > 0) {
-				beta = tofPid->btofBeta();
-				m2 = p * p * (pow(1.0 / beta, 2) - 1);
+        if (tofId >= 0) {
+            StPicoBTofPidTraits* tofPid = picoDst->btofPidTraits(tofId);
+            btofMatchFlag = tofPid->btofMatchFlag();
+            if (tofPid) {
+                beta = tofPid->btofBeta();
 				hasTof = true;
-			}
-		}
+                btofYLocal = tofPid->btofYLocal();
+                if (beta < 1e-4) { // recalculate time of flight
+                    Double_t tof = tofPid->btof();
+                    TVector3 btofHitPos = tofPid->btofHitPos();
+                    const StThreeVectorF* btofHitsPosSt = new StThreeVectorF(
+                        btofHitPos.X(),btofHitPos.Y(),btofHitPos.Z()
+                    );
+                    const StThreeVectorF* vtxPosSt = new StThreeVectorF(
+                        vx, vy, vz
+                    );
+                    Double_t L = tofPathLength(vertexPosSt, btofHitsPosSt, helix.curvature());
+                    beta = tof > 0 ? L / (tof * (C_C_LIGHT/1.e9)) : std::numeric_limits<Float_t>::quiet_NaN(); // note: quiet nan will never pass > N or < N
+                }
+            }
+        }
+        Double_t m2 = -999;
+        // if (btofMatchFlag > 0 && beta > 1e-5) {
+        if (btofMatchFlag > 0 && beta > 0 && fabs(btofYLocal) < 1.8) {
+            m2 = pcm * pcm * (pow(1.0 / beta, 2) - 1);
+        }
 		if (
 			(hasTof && m2 > 0.6 && m2 < 1.2) ||
 			(!hasTof && pt <= 0.4) // only skip TOF quality condition in very low pt
