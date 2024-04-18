@@ -2,11 +2,19 @@
 
 `author: yghuang`
 
-`date: 07.04.2024`
-
-`version: 1.2`
+`version: 1.3.1`
 
 ## Patch Note
+
+18.04.2024 by yghuang (v1.3.1):
+
+> Fix some bugs
+
+18.04.2024 by yghuang (v1.3):
+
+> StCFMult is updated to v2.3, mainly changed the bTOF beta and mass square calculation
+>
+> And in PID efficiency histogram, they are changed accordingly
 
 07.04.2024 by yghuang (v1.2):
 
