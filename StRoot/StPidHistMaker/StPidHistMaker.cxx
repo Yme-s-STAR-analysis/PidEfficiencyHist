@@ -86,23 +86,6 @@ Int_t StPidHistMaker::Init() {
 }
 
 //---------------------------------------------------------
-Int_t StPidHistMaker::vz_split(double vz) {
-	if (-30 < vz && vz < -10) {
-		return 0;
-	} else if (-10 < vz && vz < 10) {
-		return 1;
-	} else if (10 < vz && vz < 30) {
-		return 2;
-	} else if (-50 < vz && vz < -30) {
-		return 3;
-	} else if (30 < vz && vz < 50) {
-		return 4;
-	} else {
-		return -1;
-	}
-}
-
-//---------------------------------------------------------
 Int_t StPidHistMaker::Finish() {
 	mFileOut->cd();
 	// hPro[nVz]->Write();
