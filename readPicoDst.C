@@ -23,6 +23,7 @@ void readPicoDst(const Char_t *inputFile = "file.list", TString JobIdName = "tof
     gSystem->Load("CentCorrTool");
     gSystem->Load("MeanDcaTool");
     gSystem->Load("TriggerTool");
+    gSystem->Load("VtxShiftTool");
 
     chain = new StChain();
 
