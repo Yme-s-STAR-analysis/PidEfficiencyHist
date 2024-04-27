@@ -2,13 +2,17 @@
 
 `author: yghuang`
 
-`version: 1.4`
+`version: 1.4.1`
 
 ## Patch Note
 
 27.04.2024 by yghuang (v1.4):
 
 > VtxShiftTool is used
+
+(v1.4.1):
+
+> Fix a bug: remove vz split member function
 
 18.04.2024 by yghuang (v1.3.1):
 
