@@ -29,6 +29,7 @@
 #include "StRoot/TpcShiftTool/TpcShiftTool.h"
 #include "StRoot/TriggerTool/TriggerTool.h"
 #include "StRoot/StCFMult/StCFMult.h"
+#include "StRoot/VtxShiftTool/VtxShiftTool.h"
 
 StPidHistMaker::StPidHistMaker(
 	const char* name, 
@@ -58,32 +59,6 @@ Int_t StPidHistMaker::Init() {
 		400, -20.0, 20.0
 	);
 
-	// ignore vz and centrality dependence
-	// for (int i=0; i<nVz; i++) {
-	// 	hPro[i] = new TH2F(
-	// 		Form("hPro_vz%d", i), ";n#sigma;p [GeV/c]",
-	// 		500, -20.0, 20.0,
-	// 		50, 0.0, 5.0
-	// 	);
-	// }
-	// for (int i=0; i<nVz; i++) {
-	// 	hPbar[i] = new TH2F(
-	// 		Form("hPbar_vz%d", i), ";n#sigma;p [GeV/c]",
-	// 		500, -20.0, 20.0,
-	// 		50, 0.0, 5.0
-	// 	);
-	// }
-	// hPro[nVz] = new TH2F(
-	// 		"hPro", ";n#sigma;p [GeV/c]",
-	// 		500, -20.0, 20.0,
-	// 		50, 0.0, 5.0
-	// );
-	// hPbar[nVz] = new TH2F(
-	// 		"hPbar", ";n#sigma;p [GeV/c]",
-	// 		500, -20.0, 20.0,
-	// 		50, 0.0, 5.0
-	// );
-
 	// initialize costume modules
 
 	// mean dca tool
@@ -103,6 +78,9 @@ Int_t StPidHistMaker::Init() {
 
 	// trigger tool
 	mtTrg = new TriggerTool();
+
+	// vertext shift tool
+	mtVtx = new VtxShiftTool();
 
 	return kStOK;
 }
@@ -176,12 +154,7 @@ Int_t StPidHistMaker::Make() {
 		return kStOK;
 	}
 
-	// using Ashish's shifted vr cut
-	// -> see: https://drupal.star.bnl.gov/STAR/system/files/Vr_xy_N_Vzcut.txt
-	vx = vx - 0.0417;
-	vy = vy + 0.2715;
-	Double_t vr = sqrt(vx * vx + vy * vy);
-
+	auto vr = mtVtx->GetShiftedVr(vx, vy);
 	if (vr >= 1.0 || fabs(vz) > 50.0) {
 		return kStOK;
 	}
@@ -247,9 +220,6 @@ Int_t StPidHistMaker::Make() {
 
 		if (nHitsdEdx < 5 || nHitsFit < 20 || nHitsRatio < 0.52) { continue; }
 		if (dca > 1.0) { continue; }
-
-		// Int_t vzBin = vz_split(vz);
-		// if (vzBin < 0) { continue; }
 
 		// set TOF flag
         Int_t tofId = picoTrack->bTofPidTraitsIndex();

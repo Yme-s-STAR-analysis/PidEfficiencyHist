@@ -22,7 +22,7 @@ class TpcShiftTool;
 class TriggerTool;
 class MeanDcaTool;
 class CentCorrTool;
-
+class VtxShiftTool;
 
 class StPidHistMaker : public StMaker {
 	public:
@@ -33,8 +33,6 @@ class StPidHistMaker : public StMaker {
 		virtual Int_t Make();
 		virtual void  Clear(Option_t *opt="");
 		virtual Int_t Finish();
-
-		Int_t vz_split(double vz);
 
 	private:
 		StPicoDstMaker *mPicoDstMaker;
@@ -47,10 +45,7 @@ class StPidHistMaker : public StMaker {
 		CentCorrTool* mtCent;
 		MeanDcaTool* mtDca;
 		TriggerTool* mtTrg;
-
-		// static const int nCent = 9;
-		// now we only consider 
-		// static const int nVz = 5;
+		VtxShiftTool* mtVtx;
 
 		TH3F* hPro;
 		TH3F* hPbar;
