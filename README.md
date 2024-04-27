@@ -2,9 +2,13 @@
 
 `author: yghuang`
 
-`version: 1.3.1`
+`version: 1.4`
 
 ## Patch Note
+
+27.04.2024 by yghuang (v1.4):
+
+> VtxShiftTool is used
 
 18.04.2024 by yghuang (v1.3.1):
 
