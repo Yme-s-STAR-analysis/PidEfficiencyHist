@@ -2,9 +2,13 @@
 
 `author: yghuang`
 
-`version: 1.4.1`
+`version: 1.5`
 
 ## Patch Note
+
+05.10.2024 by yghuang (v1.5):
+
+> In PID efficiency histogram, the TPC only TH3 will also be stored for purity calculation
 
 27.04.2024 by yghuang (v1.4):
 
