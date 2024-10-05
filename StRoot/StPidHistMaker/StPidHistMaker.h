@@ -49,6 +49,8 @@ class StPidHistMaker : public StMaker {
 
 		TH3F* hPro;
 		TH3F* hPbar;
+		TH3F* hProTpc;
+		TH3F* hPbarTpc;
 
 		TString mOutputName;
 		TFile* mFileOut;

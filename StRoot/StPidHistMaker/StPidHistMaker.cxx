@@ -58,6 +58,19 @@ Int_t StPidHistMaker::Init() {
 		17, 0.3, 2.0,
 		400, -20.0, 20.0
 	);
+	
+	hProTpc = new TH3F(
+		"hProTpc", ";y;p_{T} [GeV/c];n#sigma",
+		16, -0.8, 0.8,
+		17, 0.3, 2.0,
+		400, -20.0, 20.0
+	);
+	hPbarTpc = new TH3F(
+		"hPbarTpc", ";y;p_{T} [GeV/c];n#sigma",
+		16, -0.8, 0.8,
+		17, 0.3, 2.0,
+		400, -20.0, 20.0
+	);
 
 	// initialize costume modules
 
@@ -191,7 +204,7 @@ Int_t StPidHistMaker::Make() {
 		Float_t YP = 0.5 * log((EP + pz) / (EP - pz));
 		if (isnan(YP)) { continue; }
 		if (pt < 0.3 || pt > 2.0) { continue; }
-		if (fabs(YP) > 0.6) { continue; }
+		if (fabs(YP) > 0.8) { continue; }
 
     	Int_t nHitsFit = picoTrack->nHitsFit();
     	Int_t nHitsdEdx = picoTrack->nHitsDedx();
@@ -243,6 +256,8 @@ Int_t StPidHistMaker::Make() {
 			if (charge > 0) { hPro->Fill(YP, pt, nSigProton); }
 			else { hPbar->Fill(YP, pt, nSigProton); }
 		}
+		if (charge > 0) { hProTpc->Fill(YP, pt, nSigmaProton); }
+		{ hPbarTpc->Fill(YP, pt, nSigmaProton); }
 
 	}  // picotracks loop end
 	return kStOK;
