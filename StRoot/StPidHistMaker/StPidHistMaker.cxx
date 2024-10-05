@@ -109,6 +109,8 @@ Int_t StPidHistMaker::Finish() {
 	// }
 	hPro->Write();
 	hPbar->Write();
+	hProTpc->Write();
+	hPbarTpc->Write();
 	mFileOut->Close();
 	return kStOK;
 }
