@@ -256,8 +256,8 @@ Int_t StPidHistMaker::Make() {
 			if (charge > 0) { hPro->Fill(YP, pt, nSigProton); }
 			else { hPbar->Fill(YP, pt, nSigProton); }
 		}
-		if (charge > 0) { hProTpc->Fill(YP, pt, nSigmaProton); }
-		{ hPbarTpc->Fill(YP, pt, nSigmaProton); }
+		if (charge > 0) { hProTpc->Fill(YP, pt, nSigProton); }
+		{ hPbarTpc->Fill(YP, pt, nSigProton); }
 
 	}  // picotracks loop end
 	return kStOK;
